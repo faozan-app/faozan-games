@@ -151,6 +151,12 @@ canvas {
   align-items: center;
   touch-action: none;
   cursor: pointer;
+
+  /* Prevent text selection on long press */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ctrl:active,.ctrl.pressed {
@@ -250,7 +256,7 @@ canvas {
 
 <canvas id="sea" aria-label="Fish game"></canvas>
 
-<!-- NEW HOME AND SHARE BUTTONS -->
+<!-- HOME AND SHARE BUTTONS -->
 <div class="top-actions">
 
   <button
@@ -588,11 +594,17 @@ function setDir(dir,on){
 
 document.querySelectorAll('.ctrl').forEach(btn=>{
  const dir=btn.dataset.dir;
+
+ // Prevent Safari long-press selection and context menu.
+ btn.addEventListener('contextmenu',e=>e.preventDefault());
+ btn.addEventListener('selectstart',e=>e.preventDefault());
+
  btn.addEventListener('pointerdown',e=>{
   e.preventDefault();
   btn.setPointerCapture(e.pointerId);
   setDir(dir,true);
  });
+
  for(const ev of ['pointerup','pointercancel','lostpointercapture'])
   btn.addEventListener(ev,()=>setDir(dir,false));
 });
@@ -633,7 +645,7 @@ requestAnimationFrame(loop);
 
 })();
 
-/* NEW HOME BUTTON */
+/* HOME BUTTON */
 document.getElementById('homeButton').addEventListener(
   'click',
   () => {
@@ -641,7 +653,7 @@ document.getElementById('homeButton').addEventListener(
   }
 );
 
-/* NEW SHARE BUTTON */
+/* SHARE BUTTON */
 const fishShareURL = 'https://faozangames.com/fish.html';
 
 document.getElementById('shareButton').addEventListener(
@@ -673,7 +685,7 @@ document.getElementById('shareButton').addEventListener(
   }
 );
 
-/* ORIGINAL PWA SERVICE WORKER */
+/* PWA SERVICE WORKER */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./fish-sw.js', {scope:'./'})
