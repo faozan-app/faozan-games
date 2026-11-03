@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,50 +6,398 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#062b4d">
 <title>FAOZAN Fish</title>
+
+<!-- PWA: installable fish game -->
+<link rel="manifest" href="fish-manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="fish-icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="fish-icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FAOZAN Fish">
+
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#041e35;font-family:system-ui,-apple-system,sans-serif;touch-action:none;user-select:none}canvas{display:block;width:100%;height:100%}.hud{position:absolute;top:max(10px,env(safe-area-inset-top));left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;color:#e5fdff;text-shadow:0 1px 7px #034}.brand{font-size:clamp(12px,2.2vw,17px);font-weight:900;letter-spacing:.12em;opacity:.9}.growth{font-size:clamp(11px,2vw,15px);font-weight:700;padding:8px 12px;border:1px solid #bdfcff77;border-radius:50px;background:#00405c55;backdrop-filter:blur(8px)}.controls{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(3,var(--btn));grid-template-rows:repeat(2,var(--btn));gap:5px;--btn:clamp(50px,min(11vh,17vw),74px);touch-action:none}.ctrl{border:1.5px solid #d1fbff8c;border-radius:18px;color:#f2ffff;background:linear-gradient(145deg,#b5f9ff45,#6be8f52b 50%,#006b9d55);box-shadow:inset 0 1px 1px #fff8,0 4px 18px #00273c66;font-size:clamp(27px,6vw,36px);font-weight:650;display:flex;justify-content:center;align-items:center;touch-action:none;cursor:pointer}.ctrl:active,.ctrl.pressed{background:#69dbec88;transform:scale(.95)}.up{grid-column:2;grid-row:1}.left{grid-column:1;grid-row:2}.down{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}.panel-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#00182a99;backdrop-filter:blur(7px);padding:16px}.panel{width:min(440px,90vw);border:1px solid #b4faff8c;border-radius:26px;padding:clamp(24px,4vw,34px) 24px;background:linear-gradient(150deg,#176286e8,#032e51eb);color:#f1ffff;box-shadow:0 20px 60px #001729aa;text-align:center}.panel h1{margin:0 0 9px;font-size:clamp(25px,6vw,36px)}.panel p{font-size:15px;line-height:1.55;opacity:.9;margin:8px 0 20px}.play{background:linear-gradient(130deg,#8ef9dd,#5addf6);color:#06415b;border:0;border-radius:15px;padding:13px 35px;font-weight:900;font-size:19px;cursor:pointer}.hint{font-size:12px;opacity:.75;margin-top:14px}.hidden{display:none!important}@media(orientation:portrait){.controls{--btn:clamp(56px,17vw,74px)}.brand{max-width:48vw}.growth{padding:7px 10px}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#041e35;font-family:system-ui,-apple-system,sans-serif;touch-action:none;user-select:none}
+canvas{display:block;width:100%;height:100%}
+.hud{position:absolute;top:max(10px,env(safe-area-inset-top));left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;color:#e5fdff;text-shadow:0 1px 7px #034}
+.brand{font-size:clamp(12px,2.2vw,17px);font-weight:900;letter-spacing:.12em;opacity:.9}
+.growth{font-size:clamp(11px,2vw,15px);font-weight:700;padding:8px 12px;border:1px solid #bdfcff77;border-radius:50px;background:#00405c55;backdrop-filter:blur(8px)}
+.controls{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(3,var(--btn));grid-template-rows:repeat(2,var(--btn));gap:5px;--btn:clamp(50px,min(11vh,17vw),74px);touch-action:none}
+.ctrl{border:1.5px solid #d1fbff8c;border-radius:18px;color:#f2ffff;background:linear-gradient(145deg,#b5f9ff45,#6be8f52b 50%,#006b9d55);box-shadow:inset 0 1px 1px #fff8,0 4px 18px #00273c66;font-size:clamp(27px,6vw,36px);font-weight:650;display:flex;justify-content:center;align-items:center;touch-action:none;cursor:pointer}
+.ctrl:active,.ctrl.pressed{background:#69dbec88;transform:scale(.95)}
+.up{grid-column:2;grid-row:1}
+.left{grid-column:1;grid-row:2}
+.down{grid-column:2;grid-row:2}
+.right{grid-column:3;grid-row:2}
+.panel-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#00182a99;backdrop-filter:blur(7px);padding:16px}
+.panel{width:min(440px,90vw);border:1px solid #b4faff8c;border-radius:26px;padding:clamp(24px,4vw,34px) 24px;background:linear-gradient(150deg,#176286e8,#032e51eb);color:#f1ffff;box-shadow:0 20px 60px #001729aa;text-align:center}
+.panel h1{margin:0 0 9px;font-size:clamp(25px,6vw,36px)}
+.panel p{font-size:15px;line-height:1.55;opacity:.9;margin:8px 0 20px}
+.play{background:linear-gradient(130deg,#8ef9dd,#5addf6);color:#06415b;border:0;border-radius:15px;padding:13px 35px;font-weight:900;font-size:19px;cursor:pointer}
+.hint{font-size:12px;opacity:.75;margin-top:14px}
+.hidden{display:none!important}
+@media(orientation:portrait){
+.controls{--btn:clamp(56px,17vw,74px)}
+.brand{max-width:48vw}
+}
 </style>
 </head>
 <body>
+
 <canvas id="sea" aria-label="Fish game"></canvas>
-<div class="hud"><span class="brand">FAOZAN FISH</span><span class="growth" id="growth">GROWTH 0%</span></div>
-<div class="controls" aria-label="Movement buttons"><button class="ctrl up" data-dir="up" aria-label="Up">↑</button><button class="ctrl left" data-dir="left" aria-label="Left">←</button><button class="ctrl down" data-dir="down" aria-label="Down">↓</button><button class="ctrl right" data-dir="right" aria-label="Right">→</button></div>
-<div class="panel-wrap" id="overlay"><div class="panel"><h1 id="panelTitle">FAOZAN FISH</h1><p id="panelText">Eat smaller fish. Avoid bigger fish. Grow to win!</p><button class="play" id="play">PLAY</button><div class="hint">Hold the arrows to swim · Keyboard arrows also work</div></div></div>
+
+<div class="hud">
+  <span class="brand">FAOZAN FISH</span>
+  <span class="growth" id="growth">GROWTH 0%</span>
+</div>
+
+<div class="controls" aria-label="Movement buttons">
+  <button class="ctrl up" data-dir="up" aria-label="Up">↑</button>
+  <button class="ctrl left" data-dir="left" aria-label="Left">←</button>
+  <button class="ctrl down" data-dir="down" aria-label="Down">↓</button>
+  <button class="ctrl right" data-dir="right" aria-label="Right">→</button>
+</div>
+
+<div class="panel-wrap" id="overlay">
+  <div class="panel">
+    <h1 id="panelTitle">FAOZAN FISH</h1>
+    <p id="panelText">Eat smaller fish. Avoid bigger fish. Grow to win!</p>
+    <button class="play" id="play">PLAY</button>
+    <div class="hint">Hold the arrows to swim · Keyboard arrows also work</div>
+  </div>
+</div>
+
 <script>
 (()=>{'use strict';
-const canvas=document.getElementById('sea'),ctx=canvas.getContext('2d'),overlay=document.getElementById('overlay'),title=document.getElementById('panelTitle'),message=document.getElementById('panelText'),play=document.getElementById('play'),growth=document.getElementById('growth');
-let W=innerWidth,H=innerHeight,dpr=1,last=0,elapsed=0,spawnTimer=0,mode='ready',player,fish=[],bubbles=[],particles=[];
-const dirs={up:false,down:false,left:false,right:false};const colors=['#ffba69','#ec88b6','#b4a1ff','#9fe7fd','#ffdc91','#8ce0a7'];
-const rand=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);if(player){player.x=clamp(player.x,player.r*1.4,W-player.r*1.4);player.y=clamp(player.y,player.r*1.2,H-player.r*1.2)}bubbles=Array.from({length:Math.max(18,Math.floor(W*H/18000))},()=>({x:rand(0,W),y:rand(0,H),r:rand(1,4),speed:rand(8,24),alpha:rand(.09,.35)}))}
-function reset(){player={x:W*.37,y:H*.46,r:Math.max(17,Math.min(27,Math.min(W,H)*.045)),start:0,goal:Math.max(100,Math.min(W,H)*.28)};player.start=player.r;fish=[];particles=[];elapsed=0;spawnTimer=.1;growth.textContent='GROWTH 0%';mode='playing';overlay.classList.add('hidden');Object.keys(dirs).forEach(k=>dirs[k]=false);document.querySelectorAll('.ctrl').forEach(b=>b.classList.remove('pressed'))}
-function finish(won){mode=won?'won':'lost';title.textContent=won?'YOU WIN!':'GAME OVER';message.textContent=won?'Your fish grew into an ocean giant!':'A bigger fish caught you. Try again!';play.textContent='PLAY AGAIN';overlay.classList.remove('hidden');Object.keys(dirs).forEach(k=>dirs[k]=false)}
-function makeFish(){const progress=clamp((player.r-player.start)/(player.goal-player.start),0,1);let r;if(Math.random()<.68)r=player.r*rand(.38,.88);else r=player.r*rand(1.17,1.75);r=clamp(r,8,Math.max(32,Math.min(W,H)*.22));fish.push({x:W+r*3+rand(0,W*.15),y:rand(r+12,Math.max(r+13,H-r-12)),r,v:rand(47,90)+progress*75,phase:rand(0,6.283),color:colors[Math.floor(rand(0,colors.length))]})}
-function spark(x,y,color){for(let i=0;i<10;i++)particles.push({x,y,vx:rand(-65,65),vy:rand(-65,65),life:rand(.25,.65),max:.65,color})}
-function update(dt){if(mode==='playing'){
- elapsed+=dt;const dx=(dirs.right?1:0)-(dirs.left?1:0),dy=(dirs.down?1:0)-(dirs.up?1:0),mag=Math.hypot(dx,dy)||1,speed=clamp(Math.min(W,H)*.62,175,340);player.x=clamp(player.x+dx/mag*speed*dt,player.r*1.2,W-player.r*1.2);player.y=clamp(player.y+dy/mag*speed*dt,player.r*1.2,H-player.r*1.2);
- spawnTimer-=dt;const cap=Math.min(24,Math.max(10,Math.floor(W/55)));if(spawnTimer<=0&&fish.length<cap){makeFish();spawnTimer=rand(.43,.95)*Math.max(.53,1-elapsed/380)}
- for(let i=fish.length-1;i>=0;i--){const f=fish[i];f.x-=f.v*dt;f.phase+=dt*5;if(f.x<-f.r*3){fish.splice(i,1);continue}const collide=Math.hypot(player.x-f.x,player.y-f.y)<(player.r+f.r)*.68;if(!collide)continue;
- if(f.r<player.r*.96){spark(f.x,f.y,f.color);fish.splice(i,1);player.r=Math.min(player.goal,player.r+Math.max(1.1,f.r*.105));growth.textContent='GROWTH '+Math.floor(clamp((player.r-player.start)/(player.goal-player.start),0,1)*100)+'%';if(player.r>=player.goal){finish(true);break}}
- else if(f.r>player.r*1.04){finish(false);break}
+
+const canvas=document.getElementById('sea'),
+ctx=canvas.getContext('2d'),
+overlay=document.getElementById('overlay'),
+title=document.getElementById('panelTitle'),
+message=document.getElementById('panelText'),
+play=document.getElementById('play'),
+growth=document.getElementById('growth');
+
+let W=innerWidth,H=innerHeight,dpr=1,last=0,elapsed=0,
+spawnTimer=0,mode='ready',player,fish=[],bubbles=[],particles=[];
+
+const dirs={up:false,down:false,left:false,right:false};
+const colors=['#ffba69','#ec88b6','#b4a1ff','#9fe7fd','#ffdc91','#8ce0a7'];
+
+const rand=(a,b)=>a+Math.random()*(b-a),
+clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+function resize(){
+ W=innerWidth;
+ H=innerHeight;
+ dpr=Math.min(devicePixelRatio||1,2);
+ canvas.width=Math.round(W*dpr);
+ canvas.height=Math.round(H*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ if(player){
+  player.x=clamp(player.x,player.r*1.4,W-player.r*1.4);
+  player.y=clamp(player.y,player.r*1.2,H-player.r*1.2);
  }
- }
- bubbles.forEach(b=>{b.y-=b.speed*dt;if(b.y<-10){b.y=H+10;b.x=rand(0,W)}});for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;if(p.life<=0)particles.splice(i,1)}
+ bubbles=Array.from({length:Math.max(18,Math.floor(W*H/18000))},()=>({
+  x:rand(0,W),y:rand(0,H),r:rand(1,4),
+  speed:rand(8,24),alpha:rand(.09,.35)
+ }));
 }
-function shape(x,y,r,color,flipped=false,wiggle=0,hero=false){ctx.save();ctx.translate(x,y);if(flipped)ctx.scale(-1,1);const s=r/28;ctx.scale(s,s);ctx.shadowColor=color;ctx.shadowBlur=hero?20:8;
- // Silhouette has no eyes, mouth, or facial features.
- ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(-24,0);ctx.lineTo(-54,-23+wiggle);ctx.quadraticCurveTo(-46,0,-54,23+wiggle);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(-29,0);ctx.bezierCurveTo(-9,-32,25,-28,43,-7);ctx.quadraticCurveTo(50,0,43,7);ctx.bezierCurveTo(25,28,-9,32,-29,0);ctx.fill();ctx.shadowBlur=0;
- const gr=ctx.createLinearGradient(0,-27,0,27);gr.addColorStop(0,'#ffffffaa');gr.addColorStop(.3,'#ffffff30');gr.addColorStop(.65,'#001e4930');gr.addColorStop(1,'#002e4a88');ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(-29,0);ctx.bezierCurveTo(-9,-32,25,-28,43,-7);ctx.quadraticCurveTo(50,0,43,7);ctx.bezierCurveTo(25,28,-9,32,-29,0);ctx.fill();ctx.strokeStyle='#ffffff7b';ctx.lineWidth=1.5;ctx.stroke();ctx.beginPath();ctx.moveTo(-17,-17);ctx.quadraticCurveTo(9,-27,26,-17);ctx.strokeStyle='#ffffffaa';ctx.lineWidth=4;ctx.lineCap='round';ctx.stroke();ctx.restore()}
-function render(t){const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#0878a6');bg.addColorStop(.48,'#07527e');bg.addColorStop(1,'#042139');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
- for(let k=0;k<6;k++){const x=(k+.25)*W/5+Math.sin(t*.00025+k)*14;ctx.beginPath();ctx.moveTo(x-48,0);ctx.lineTo(x+15,0);ctx.lineTo(x+155,H);ctx.lineTo(x+35,H);ctx.closePath();ctx.fillStyle='rgba(182,249,255,.028)';ctx.fill()}
- bubbles.forEach(b=>{ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.strokeStyle=`rgba(207,254,255,${b.alpha})`;ctx.lineWidth=1;ctx.stroke()});fish.forEach(f=>shape(f.x,f.y+Math.sin(f.phase)*2,f.r,f.color,true,Math.sin(f.phase)*4));if(player)shape(player.x,player.y,player.r,'#19e6d5',false,Math.sin(t*.008)*3,true);
- particles.forEach(p=>{ctx.globalAlpha=Math.min(1,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}
-function loop(now){const dt=Math.min(.04,(now-last)/1000||0);last=now;update(dt);render(now);requestAnimationFrame(loop)}
-function setDir(dir,on){dirs[dir]=on;document.querySelectorAll('.ctrl').forEach(b=>{if(b.dataset.dir===dir)b.classList.toggle('pressed',on)})}
-document.querySelectorAll('.ctrl').forEach(btn=>{const dir=btn.dataset.dir;btn.addEventListener('pointerdown',e=>{e.preventDefault();btn.setPointerCapture(e.pointerId);setDir(dir,true)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])btn.addEventListener(ev,()=>setDir(dir,false))});
-const keys={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};addEventListener('keydown',e=>{if(keys[e.key]){e.preventDefault();setDir(keys[e.key],true)}});addEventListener('keyup',e=>{if(keys[e.key]){e.preventDefault();setDir(keys[e.key],false)}});addEventListener('blur',()=>Object.keys(dirs).forEach(k=>setDir(k,false)));
-play.addEventListener('click',reset);addEventListener('resize',resize);resize();player={x:W*.37,y:H*.46,r:Math.max(17,Math.min(27,Math.min(W,H)*.045))};requestAnimationFrame(loop);
+
+function reset(){
+ player={
+  x:W*.37,
+  y:H*.46,
+  r:Math.max(17,Math.min(27,Math.min(W,H)*.045)),
+  start:0,
+  goal:Math.max(100,Math.min(W,H)*.28)
+ };
+ player.start=player.r;
+ fish=[];
+ particles=[];
+ elapsed=0;
+ spawnTimer=.1;
+ growth.textContent='GROWTH 0%';
+ mode='playing';
+ overlay.classList.add('hidden');
+ Object.keys(dirs).forEach(k=>dirs[k]=false);
+ document.querySelectorAll('.ctrl').forEach(b=>b.classList.remove('pressed'));
+}
+
+function finish(won){
+ mode=won?'won':'lost';
+ title.textContent=won?'YOU WIN!':'GAME OVER';
+ message.textContent=won?
+  'Your fish grew into an ocean giant!':
+  'A bigger fish caught you. Try again!';
+ play.textContent='PLAY AGAIN';
+ overlay.classList.remove('hidden');
+ Object.keys(dirs).forEach(k=>dirs[k]=false);
+}
+
+function makeFish(){
+ const progress=clamp((player.r-player.start)/(player.goal-player.start),0,1);
+ let r;
+ if(Math.random()<.68)r=player.r*rand(.38,.88);
+ else r=player.r*rand(1.17,1.75);
+ r=clamp(r,8,Math.max(32,Math.min(W,H)*.22));
+ fish.push({
+  x:W+r*3+rand(0,W*.15),
+  y:rand(r+12,Math.max(r+13,H-r-12)),
+  r,
+  v:rand(47,90)+progress*75,
+  phase:rand(0,6.283),
+  color:colors[Math.floor(rand(0,colors.length))]
+ });
+}
+
+function spark(x,y,color){
+ for(let i=0;i<10;i++)
+  particles.push({
+   x,y,vx:rand(-65,65),vy:rand(-65,65),
+   life:rand(.25,.65),max:.65,color
+  });
+}
+
+function update(dt){
+ if(mode==='playing'){
+  elapsed+=dt;
+  const dx=(dirs.right?1:0)-(dirs.left?1:0),
+  dy=(dirs.down?1:0)-(dirs.up?1:0),
+  mag=Math.hypot(dx,dy)||1,
+  speed=clamp(Math.min(W,H)*.62,175,340);
+
+  player.x=clamp(player.x+dx/mag*speed*dt,player.r*1.2,W-player.r*1.2);
+  player.y=clamp(player.y+dy/mag*speed*dt,player.r*1.2,H-player.r*1.2);
+
+  spawnTimer-=dt;
+  const cap=Math.min(24,Math.max(10,Math.floor(W/55)));
+
+  if(spawnTimer<=0&&fish.length<cap){
+   makeFish();
+   spawnTimer=rand(.43,.95)*Math.max(.53,1-elapsed/380);
+  }
+
+  for(let i=fish.length-1;i>=0;i--){
+   const f=fish[i];
+   f.x-=f.v*dt;
+   f.phase+=dt*5;
+
+   if(f.x<-f.r*3){
+    fish.splice(i,1);
+    continue;
+   }
+
+   const collide=Math.hypot(player.x-f.x,player.y-f.y)<(player.r+f.r)*.68;
+   if(!collide)continue;
+
+   if(f.r<player.r*.96){
+    spark(f.x,f.y,f.color);
+    fish.splice(i,1);
+    player.r=Math.min(player.goal,player.r+Math.max(1.1,f.r*.105));
+    growth.textContent='GROWTH '+Math.floor(clamp(
+     (player.r-player.start)/(player.goal-player.start),0,1
+    )*100)+'%';
+    if(player.r>=player.goal){
+     finish(true);
+     break;
+    }
+   }else if(f.r>player.r*1.04){
+    finish(false);
+    break;
+   }
+  }
+ }
+
+ bubbles.forEach(b=>{
+  b.y-=b.speed*dt;
+  if(b.y<-10){
+   b.y=H+10;
+   b.x=rand(0,W);
+  }
+ });
+
+ for(let i=particles.length-1;i>=0;i--){
+  let p=particles[i];
+  p.x+=p.vx*dt;
+  p.y+=p.vy*dt;
+  p.life-=dt;
+  if(p.life<=0)particles.splice(i,1);
+ }
+}
+
+function shape(x,y,r,color,flipped=false,wiggle=0,hero=false){
+ ctx.save();
+ ctx.translate(x,y);
+ if(flipped)ctx.scale(-1,1);
+ const s=r/28;
+ ctx.scale(s,s);
+ ctx.shadowColor=color;
+ ctx.shadowBlur=hero?20:8;
+
+ // All fish have no eyes, mouths or facial features.
+ ctx.fillStyle=color;
+ ctx.beginPath();
+ ctx.moveTo(-24,0);
+ ctx.lineTo(-54,-23+wiggle);
+ ctx.quadraticCurveTo(-46,0,-54,23+wiggle);
+ ctx.closePath();
+ ctx.fill();
+
+ ctx.beginPath();
+ ctx.moveTo(-29,0);
+ ctx.bezierCurveTo(-9,-32,25,-28,43,-7);
+ ctx.quadraticCurveTo(50,0,43,7);
+ ctx.bezierCurveTo(25,28,-9,32,-29,0);
+ ctx.fill();
+ ctx.shadowBlur=0;
+
+ const gr=ctx.createLinearGradient(0,-27,0,27);
+ gr.addColorStop(0,'#ffffffaa');
+ gr.addColorStop(.3,'#ffffff30');
+ gr.addColorStop(.65,'#001e4930');
+ gr.addColorStop(1,'#002e4a88');
+
+ ctx.fillStyle=gr;
+ ctx.beginPath();
+ ctx.moveTo(-29,0);
+ ctx.bezierCurveTo(-9,-32,25,-28,43,-7);
+ ctx.quadraticCurveTo(50,0,43,7);
+ ctx.bezierCurveTo(25,28,-9,32,-29,0);
+ ctx.fill();
+
+ ctx.strokeStyle='#ffffff7b';
+ ctx.lineWidth=1.5;
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(-17,-17);
+ ctx.quadraticCurveTo(9,-27,26,-17);
+ ctx.strokeStyle='#ffffffaa';
+ ctx.lineWidth=4;
+ ctx.lineCap='round';
+ ctx.stroke();
+ ctx.restore();
+}
+
+function render(t){
+ const bg=ctx.createLinearGradient(0,0,0,H);
+ bg.addColorStop(0,'#0878a6');
+ bg.addColorStop(.48,'#07527e');
+ bg.addColorStop(1,'#042139');
+ ctx.fillStyle=bg;
+ ctx.fillRect(0,0,W,H);
+
+ for(let k=0;k<6;k++){
+  const x=(k+.25)*W/5+Math.sin(t*.00025+k)*14;
+  ctx.beginPath();
+  ctx.moveTo(x-48,0);
+  ctx.lineTo(x+15,0);
+  ctx.lineTo(x+155,H);
+  ctx.lineTo(x+35,H);
+  ctx.closePath();
+  ctx.fillStyle='rgba(182,249,255,.028)';
+  ctx.fill();
+ }
+
+ bubbles.forEach(b=>{
+  ctx.beginPath();
+  ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+  ctx.strokeStyle=`rgba(207,254,255,${b.alpha})`;
+  ctx.lineWidth=1;
+  ctx.stroke();
+ });
+
+ fish.forEach(f=>shape(
+  f.x,f.y+Math.sin(f.phase)*2,
+  f.r,f.color,true,Math.sin(f.phase)*4
+ ));
+
+ if(player)shape(
+  player.x,player.y,player.r,
+  '#19e6d5',false,Math.sin(t*.008)*3,true
+ );
+
+ particles.forEach(p=>{
+  ctx.globalAlpha=Math.min(1,p.life/p.max);
+  ctx.fillStyle=p.color;
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,3,0,Math.PI*2);
+  ctx.fill();
+ });
+ ctx.globalAlpha=1;
+}
+
+function loop(now){
+ const dt=Math.min(.04,(now-last)/1000||0);
+ last=now;
+ update(dt);
+ render(now);
+ requestAnimationFrame(loop);
+}
+
+function setDir(dir,on){
+ dirs[dir]=on;
+ document.querySelectorAll('.ctrl').forEach(b=>{
+  if(b.dataset.dir===dir)b.classList.toggle('pressed',on);
+ });
+}
+
+document.querySelectorAll('.ctrl').forEach(btn=>{
+ const dir=btn.dataset.dir;
+ btn.addEventListener('pointerdown',e=>{
+  e.preventDefault();
+  btn.setPointerCapture(e.pointerId);
+  setDir(dir,true);
+ });
+ for(const ev of ['pointerup','pointercancel','lostpointercapture'])
+  btn.addEventListener(ev,()=>setDir(dir,false));
+});
+
+const keys={
+ ArrowUp:'up',ArrowDown:'down',
+ ArrowLeft:'left',ArrowRight:'right',
+ w:'up',s:'down',a:'left',d:'right'
+};
+
+addEventListener('keydown',e=>{
+ if(keys[e.key]){
+  e.preventDefault();
+  setDir(keys[e.key],true);
+ }
+});
+
+addEventListener('keyup',e=>{
+ if(keys[e.key]){
+  e.preventDefault();
+  setDir(keys[e.key],false);
+ }
+});
+
+addEventListener('blur',()=>Object.keys(dirs).forEach(k=>setDir(k,false)));
+
+play.addEventListener('click',reset);
+addEventListener('resize',resize);
+resize();
+
+player={
+ x:W*.37,
+ y:H*.46,
+ r:Math.max(17,Math.min(27,Math.min(W,H)*.045))
+};
+
+requestAnimationFrame(loop);
+
 })();
+
+// Register the fish game's service worker for PWA support.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./fish-sw.js', {scope:'./'})
+      .catch(error => console.warn('Service worker:', error));
+  });
+}
 </script>
 </body>
 </html>
