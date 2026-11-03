@@ -1,102 +1,347 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10172b">
+<title>FAOZAN Games</title>
 
-  <title>FAOZAN Games</title>
+<style>
+* {
+  box-sizing: border-box;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(150deg,#10172b,#263c62);
+  color: white;
+  text-align: center;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(150deg, #10172b, #263c62);
-      color: white;
-      text-align: center;
-    }
+header {
+  padding: 42px 16px 15px;
+}
 
-    header {
-      padding: 45px 16px 20px;
-    }
+h1 {
+  font-size: 36px;
+  margin: 0 0 10px;
+  letter-spacing: 1px;
+}
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
+.subtitle {
+  color: #b9d5ed;
+  line-height: 1.6;
+}
 
-    .subtitle {
-      color: #b9d5ed;
-    }
+.card {
+  margin: 26px auto;
+  padding: 28px 20px;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 25px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.3);
+  box-shadow: 0 15px 35px #0005;
+}
 
-    .card {
-      margin: 35px auto;
-      padding: 30px 20px;
-      width: 90%;
-      max-width: 420px;
-      border-radius: 25px;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.3);
-      box-shadow: 0 15px 35px #0005;
-    }
+.symbol {
+  font-size: 65px;
+}
 
-    .symbol {
-      font-size: 65px;
-    }
+.fish-icon {
+  width: 110px;
+  height: 110px;
+  border-radius: 25px;
+  object-fit: cover;
+  box-shadow: 0 0 28px #28eafc55;
+}
 
-    button {
-      padding: 16px 40px;
-      border: 0;
-      border-radius: 30px;
-      background: linear-gradient(90deg,#29d4ff,#56ee91);
-      font-size: 19px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.card h2 {
+  margin: 17px 0 10px;
+}
 
-    footer {
-      padding: 30px;
-      color: #a7b8d0;
-    }
-  </style>
+.card p {
+  color: #d5e7f5;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+}
+
+button {
+  padding: 15px 25px;
+  border: 0;
+  border-radius: 30px;
+  background: linear-gradient(90deg,#29d4ff,#56ee91);
+  color: #052a40;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+}
+
+button:active {
+  transform: scale(.97);
+}
+
+.secondary {
+  background: rgba(255,255,255,.13);
+  border: 1px solid #8edfff;
+  color: white;
+}
+
+.share {
+  background: linear-gradient(90deg,#86f4df,#5ed9f6);
+}
+
+footer {
+  padding: 30px;
+  color: #a7b8d0;
+  font-size: 14px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0,12,30,.86);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 390px;
+  padding: 28px 22px;
+  border-radius: 24px;
+  background: linear-gradient(145deg,#15547c,#082744);
+  border: 1px solid #8ceaf5;
+  box-shadow: 0 15px 50px #0009;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content p {
+  line-height: 1.7;
+  color: #e0f7ff;
+}
+
+.modal-content button {
+  margin-top: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>FAOZAN GAMES</h1>
-    <p class="subtitle">
-      Play Free. Think Smart. Have Fun.
+<header>
+  <h1>FAOZAN GAMES</h1>
+  <p class="subtitle">
+    Play Free. Think Smart. Have Fun.
+  </p>
+</header>
+
+<main>
+
+  <!-- FAOZAN FISH -->
+  <section class="card">
+
+    <img
+      src="fish-icon-512.png"
+      alt="FAOZAN Fish"
+      class="fish-icon"
+    >
+
+    <h2>FAOZAN Fish</h2>
+
+    <p>
+      Eat smaller fish. Avoid bigger fish.
+      Grow into an ocean giant!
     </p>
-  </header>
 
-  <main>
-    <section class="card">
+    <div class="actions">
 
-      <div class="symbol">🔢</div>
-
-      <h2>FAOZAN Numbers</h2>
-
-      <p>
-        A fun sliding number puzzle for everyone!
-      </p>
-
-      <button onclick="window.location.href='game.html'">
+      <button onclick="openFish()">
         PLAY NOW
       </button>
 
-    </section>
-  </main>
+      <button class="secondary" onclick="showInstall()">
+        INSTALL FISH
+      </button>
 
-  <footer>
-    © 2026 FAOZAN Games
-  </footer>
+      <button class="share" onclick="shareFish()">
+        ↗ SHARE
+      </button>
+
+    </div>
+  </section>
+
+  <!-- FAOZAN NUMBERS -->
+  <section class="card">
+
+    <div class="symbol">🔢</div>
+
+    <h2>FAOZAN Numbers</h2>
+
+    <p>
+      A fun sliding number puzzle for everyone!
+    </p>
+
+    <div class="actions">
+      <button onclick="window.location.href='game.html'">
+        PLAY NOW
+      </button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  © 2026 FAOZAN Games
+</footer>
+
+<!-- INSTALL INSTRUCTIONS -->
+<div class="modal" id="installModal" role="dialog"
+     aria-modal="true" aria-labelledby="installTitle">
+
+  <div class="modal-content">
+
+    <h2 id="installTitle">INSTALL FAOZAN FISH</h2>
+
+    <p id="installInstructions">
+      Install the game on your home screen.
+    </p>
+
+    <button onclick="openFish()">
+      OPEN FISH GAME
+    </button>
+
+    <button class="secondary" onclick="closeInstall()">
+      CLOSE
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+const FISH_URL =
+  "https://faozangames.com/fish.html";
+
+const FISH_SHARE_TEXT =
+  "FAOZAN Fish 🐟\n" +
+  "Can your fish become the biggest in the ocean?\n" +
+  "Play free!\n" +
+  FISH_URL;
+
+function openFish() {
+  window.location.href = "fish.html";
+}
+
+function showInstall() {
+  const modal = document.getElementById("installModal");
+  const instructions =
+    document.getElementById("installInstructions");
+
+  const ua = navigator.userAgent || "";
+  const isIOS =
+    /iPhone|iPad|iPod/i.test(ua) ||
+    (navigator.platform === "MacIntel" &&
+     navigator.maxTouchPoints > 1);
+
+  const isAndroid = /Android/i.test(ua);
+
+  if (isIOS) {
+    instructions.innerHTML =
+      "1. Tap OPEN FISH GAME.<br>" +
+      "2. Open the game in Safari.<br>" +
+      "3. Tap the Share button.<br>" +
+      "4. Choose Add to Home Screen.<br>" +
+      "5. Tap Add.";
+  } else if (isAndroid) {
+    instructions.innerHTML =
+      "1. Tap OPEN FISH GAME.<br>" +
+      "2. Open the browser menu.<br>" +
+      "3. Choose Install app or Add to Home screen, " +
+      "if available.<br>" +
+      "4. Confirm installation.";
+  } else {
+    instructions.innerHTML =
+      "Open FAOZAN Fish in a compatible browser, " +
+      "then use the browser's Install app option " +
+      "if available.";
+  }
+
+  modal.classList.add("show");
+}
+
+function closeInstall() {
+  document.getElementById("installModal")
+    .classList.remove("show");
+}
+
+async function shareFish() {
+  const shareData = {
+    title: "FAOZAN Fish",
+    text:
+      "Can your fish become the biggest in the ocean? Play free!",
+    url: FISH_URL
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        return;
+      }
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(FISH_SHARE_TEXT);
+    alert("Game link copied! Share it with your friends.");
+  } catch (error) {
+    window.prompt("Copy and share this link:", FISH_URL);
+  }
+}
+
+document.getElementById("installModal")
+  .addEventListener("click", function(event) {
+    if (event.target === this) {
+      closeInstall();
+    }
+  });
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeInstall();
+  }
+});
+</script>
 
 </body>
 </html>
