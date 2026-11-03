@@ -1,0 +1,25 @@
+{
+  "id": "/fish.html",
+  "name": "FAOZAN Fish",
+  "short_name": "FAOZAN Fish",
+  "description": "Eat smaller fish, grow, and become the ocean giant.",
+  "start_url": "/fish.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#041e35",
+  "theme_color": "#062b4d",
+  "icons": [
+    {
+      "src": "/fish-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/fish-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
