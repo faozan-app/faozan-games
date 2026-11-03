@@ -30,7 +30,9 @@ html,body {
   background: #041e35;
   font-family: system-ui,-apple-system,sans-serif;
   touch-action: none;
+  -webkit-user-select: none;
   user-select: none;
+  -webkit-touch-callout: none;
 }
 
 canvas {
@@ -70,6 +72,9 @@ canvas {
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .top-button:active {
@@ -84,6 +89,7 @@ canvas {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+  pointer-events: none;
 }
 
 /* ORIGINAL GAME HUD */
@@ -129,6 +135,9 @@ canvas {
   gap: 5px;
   --btn: clamp(50px,min(11vh,17vw),74px);
   touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .ctrl {
@@ -144,19 +153,30 @@ canvas {
   box-shadow:
     inset 0 1px 1px #fff8,
     0 4px 18px #00273c66;
-  font-size: clamp(27px,6vw,36px);
-  font-weight: 650;
   display: flex;
   justify-content: center;
   align-items: center;
   touch-action: none;
   cursor: pointer;
-
-  /* Prevent text selection on long press */
+  padding: 0;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* SVG ARROWS: NO SELECTABLE TEXT */
+.ctrl svg {
+  width: 38px;
+  height: 38px;
+  fill: none;
+  stroke: #f2ffff;
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .ctrl:active,.ctrl.pressed {
@@ -294,12 +314,53 @@ canvas {
   <span class="growth" id="growth">GROWTH 0%</span>
 </div>
 
-<!-- ORIGINAL FOUR ARROWS -->
+<!-- SVG MOVEMENT BUTTONS -->
 <div class="controls" aria-label="Movement buttons">
-  <button class="ctrl up" data-dir="up" aria-label="Up">↑</button>
-  <button class="ctrl left" data-dir="left" aria-label="Left">←</button>
-  <button class="ctrl down" data-dir="down" aria-label="Down">↓</button>
-  <button class="ctrl right" data-dir="right" aria-label="Right">→</button>
+
+  <button
+    type="button"
+    class="ctrl up"
+    data-dir="up"
+    aria-label="Up"
+  >
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 27V5M7 14L16 5L25 14"/>
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    class="ctrl left"
+    data-dir="left"
+    aria-label="Left"
+  >
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M27 16H5M14 7L5 16L14 25"/>
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    class="ctrl down"
+    data-dir="down"
+    aria-label="Down"
+  >
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M16 5V27M7 18L16 27L25 18"/>
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    class="ctrl right"
+    data-dir="right"
+    aria-label="Right"
+  >
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M5 16H27M18 7L27 16L18 25"/>
+    </svg>
+  </button>
+
 </div>
 
 <!-- ORIGINAL GAME PANEL -->
@@ -595,7 +656,7 @@ function setDir(dir,on){
 document.querySelectorAll('.ctrl').forEach(btn=>{
  const dir=btn.dataset.dir;
 
- // Prevent Safari long-press selection and context menu.
+ // Prevent text selection and long-press menus.
  btn.addEventListener('contextmenu',e=>e.preventDefault());
  btn.addEventListener('selectstart',e=>e.preventDefault());
 
@@ -605,8 +666,9 @@ document.querySelectorAll('.ctrl').forEach(btn=>{
   setDir(dir,true);
  });
 
- for(const ev of ['pointerup','pointercancel','lostpointercapture'])
+ for(const ev of ['pointerup','pointercancel','lostpointercapture']){
   btn.addEventListener(ev,()=>setDir(dir,false));
+ }
 });
 
 const keys={
