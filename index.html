@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,6 +27,7 @@ body {
   background: linear-gradient(150deg,#10172b,#263c62);
   color: white;
   text-align: center;
+  direction: ltr;
 }
 
 header {
@@ -216,6 +217,20 @@ button.game-play:active {
   fill: white;
 }
 
+/* VISIBLE PHONE NUMBER - LEFT TO RIGHT */
+.contact-phone {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: center;
+  font-size: clamp(19px,5vw,24px);
+  font-weight: 900;
+  color: #8fffc0 !important;
+  letter-spacing: .5px;
+  margin: 20px 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
 .whatsapp-button {
   display: inline-flex;
   justify-content: center;
@@ -382,6 +397,11 @@ footer {
       Interested in advertising, business
       partnerships, or collaboration
       with FAOZAN Games?
+    </p>
+
+    <!-- PHONE NUMBER DISPLAYED LEFT TO RIGHT -->
+    <p class="contact-phone" dir="ltr">
+      <bdi dir="ltr">+966 55 398 9766</bdi>
     </p>
 
     <div class="actions">
