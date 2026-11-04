@@ -15,6 +15,44 @@
 </script>
 <!-- End Cloudflare Web Analytics -->
 
+<!-- Google Analytics 4 Configuration -->
+<script>
+const GA_MEASUREMENT_ID = "G-REPLACE_WITH_YOUR_ID";
+
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+  dataLayer.push(arguments);
+}
+
+const GA_ENABLED =
+  /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID) &&
+  GA_MEASUREMENT_ID !== "G-REPLACE_WITH_YOUR_ID";
+
+if (GA_ENABLED) {
+  const gaScript = document.createElement("script");
+  gaScript.async = true;
+  gaScript.src =
+    "https://www.googletagmanager.com/gtag/js?id=" +
+    encodeURIComponent(GA_MEASUREMENT_ID);
+  document.head.appendChild(gaScript);
+
+  gtag("js", new Date());
+  gtag("config", GA_MEASUREMENT_ID);
+}
+
+function trackClick(buttonName, gameName = "website") {
+  if (!GA_ENABLED) return;
+
+  gtag("event", "faozan_button_click", {
+    button_name: buttonName,
+    game_name: gameName,
+    transport_type: "beacon"
+  });
+}
+</script>
+<!-- End Google Analytics -->
+
 <style>
 * {
   box-sizing: border-box;
@@ -332,7 +370,10 @@ footer {
     <div class="actions">
 
       <!-- PREMIUM ORANGE PLAY BUTTON -->
-      <button class="game-play" onclick="openFish()">
+      <button
+        class="game-play"
+        onclick="openFish()"
+      >
         <span class="play-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M7 3.8c0-.8.9-1.2 1.6-.8l12 7.7c1 .6 1 2 0 2.6l-12 7.7c-.7.4-1.6 0-1.6-.8V3.8z"/>
@@ -341,11 +382,17 @@ footer {
         <span class="play-label">PLAY NOW</span>
       </button>
 
-      <button class="secondary" onclick="showInstall()">
+      <button
+        class="secondary"
+        onclick="showInstall()"
+      >
         INSTALL FISH
       </button>
 
-      <button class="share" onclick="shareFish()">
+      <button
+        class="share"
+        onclick="shareFish()"
+      >
         ↗ SHARE
       </button>
 
@@ -368,7 +415,7 @@ footer {
       <!-- PREMIUM ORANGE PLAY BUTTON -->
       <button
         class="game-play"
-        onclick="window.location.href='game.html'"
+        onclick="openNumbers()"
       >
         <span class="play-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
@@ -411,6 +458,7 @@ footer {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contact FAOZAN Games via WhatsApp"
+        onclick="trackClick('contact_whatsapp')"
       >
         CONTACT VIA WHATSAPP
       </a>
@@ -425,8 +473,13 @@ footer {
 </footer>
 
 <!-- INSTALL INSTRUCTIONS -->
-<div class="modal" id="installModal" role="dialog"
-     aria-modal="true" aria-labelledby="installTitle">
+<div
+  class="modal"
+  id="installModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="installTitle"
+>
 
   <div class="modal-content">
 
@@ -458,16 +511,28 @@ const FISH_SHARE_TEXT =
   "Play free!\n" +
   FISH_URL;
 
+/* PLAY FISH */
 function openFish() {
+  trackClick("play_fish", "fish");
   window.location.href = "fish.html";
 }
 
+/* PLAY NUMBERS */
+function openNumbers() {
+  trackClick("play_numbers", "numbers");
+  window.location.href = "game.html";
+}
+
+/* INSTALL FISH */
 function showInstall() {
+  trackClick("install_fish", "fish");
+
   const modal = document.getElementById("installModal");
   const instructions =
     document.getElementById("installInstructions");
 
   const ua = navigator.userAgent || "";
+
   const isIOS =
     /iPhone|iPad|iPod/i.test(ua) ||
     (navigator.platform === "MacIntel" &&
@@ -504,7 +569,10 @@ function closeInstall() {
     .classList.remove("show");
 }
 
+/* SHARE FISH */
 async function shareFish() {
+  trackClick("share_fish", "fish");
+
   const shareData = {
     title: "FAOZAN Fish",
     text:
@@ -531,6 +599,7 @@ async function shareFish() {
   }
 }
 
+/* MODAL BACKGROUND CLOSE */
 document.getElementById("installModal")
   .addEventListener("click", function(event) {
     if (event.target === this) {
@@ -538,6 +607,7 @@ document.getElementById("installModal")
     }
   });
 
+/* ESCAPE KEY CLOSE */
 document.addEventListener("keydown", function(event) {
   if (event.key === "Escape") {
     closeInstall();
