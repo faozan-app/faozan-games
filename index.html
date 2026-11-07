@@ -179,8 +179,45 @@ function drawFilters(){const box=$('filters');box.replaceChildren();looks.forEac
 function drawTabs(){const cats=['All','Soft','Romance','Luxury','Earth'];$('tabs').replaceChildren();cats.forEach(c=>{const b=document.createElement('button');b.className='tab'+(category===c?' on':'');b.textContent=c;b.onclick=()=>{category=c;drawTabs();drawFilters()};$('tabs').append(b)})}
 function active(active){$('empty').style.display=active?'none':'flex';$('capture').disabled=!active;$('save').disabled=!active;$('share').disabled=!active;}
 async function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
-async function startCamera(){if(!navigator.mediaDevices?.getUserMedia){notify('Camera requires HTTPS and a supported browser. Use Photo instead.');return}
- try{await stopCamera();const newStream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:front?'user':'environment'},width:{ideal:1280},height:{ideal:1706}}});stream=newStream;video.srcObject=stream;await video.play();video.classList.toggle('rear',!front);video.style.display='block';photo.style.display='none';mode='live';active(true);notify('Camera ready');}catch(err){notify('Camera unavailable. Allow camera access or choose Photo.');active(mode==='photo')}}
+
+// Camera activation + Google Analytics tracking
+async function startCamera(){
+ if(!navigator.mediaDevices?.getUserMedia){
+  notify('Camera requires HTTPS and a supported browser. Use Photo instead.');
+  return;
+ }
+ try{
+  await stopCamera();
+  const newStream=await navigator.mediaDevices.getUserMedia({
+   audio:false,
+   video:{
+    facingMode:{ideal:front?'user':'environment'},
+    width:{ideal:1280},
+    height:{ideal:1706}
+   }
+  });
+  stream=newStream;
+  video.srcObject=stream;
+  await video.play();
+  video.classList.toggle('rear',!front);
+  video.style.display='block';
+  photo.style.display='none';
+  mode='live';
+  active(true);
+
+  // Record only successful camera activations.
+  // No photos or camera video are sent to Analytics.
+  if(typeof gtag==='function'){
+   gtag('event','camera_open');
+  }
+
+  notify('Camera ready');
+ }catch(err){
+  notify('Camera unavailable. Allow camera access or choose Photo.');
+  active(mode==='photo');
+ }
+}
+
 $('openCamera').onclick=startCamera;$('flip').onclick=()=>{front=!front;startCamera()};$('live').onclick=startCamera;$('uploadButton').onclick=()=>$('upload').click();
 $('upload').onchange=e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){notify('Select an image file');return}const u=URL.createObjectURL(file),img=new Image();img.onload=()=>{if(uploadedURL)URL.revokeObjectURL(uploadedURL);uploadedURL=u;photo.src=u;photo.style.display='block';video.style.display='none';mode='photo';active(true);stopCamera();apply();notify('Photo ready for editing')};img.onerror=()=>{URL.revokeObjectURL(u);notify('Unable to open this image')};img.src=u;e.target.value='';};
 // Render final photo to canvas so all filter effects are present in saved/shared output.
