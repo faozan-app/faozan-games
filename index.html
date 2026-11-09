@@ -9,12 +9,10 @@
 <meta name="description" content="MILLION FILTERS — twenty elegant photo filters in one beautiful camera. Capture, edit, save and share.">
 
 <!-- Cloudflare Web Analytics -->
-<script
-  type="module"
-  src="https://static.cloudflareinsights.com/beacon.min.js"
-  data-cf-beacon='{"token":"3b9b1e3003164f9a9bd0b36838333860"}'>
+<script type="module"
+ src="https://static.cloudflareinsights.com/beacon.min.js"
+ data-cf-beacon='{"token":"3b9b1e3003164f9a9bd0b36838333860"}'>
 </script>
-<!-- End Cloudflare Web Analytics -->
 
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5RWJ4Q8L8X"></script>
@@ -24,15 +22,12 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());
 gtag('config','G-5RWJ4Q8L8X');
 </script>
-<!-- End Google Analytics -->
 
 <style>
 :root{
  color-scheme:dark;
  --bg:#0b0b12;
- --panel:#1b1b27;
  --ink:#f9f4ef;
- --muted:#c8bfc7;
  --gold:#e4bc85;
  --border:rgba(255,255,255,.14);
 }
@@ -44,15 +39,16 @@ html,body{
  color:var(--ink);
  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-button,input{font:inherit}
-button{cursor:pointer;touch-action:manipulation}
-button:disabled{opacity:.38;cursor:not-allowed}
 body{
  background:
  radial-gradient(ellipse at 50% 0,rgba(132,79,119,.19),transparent 48%),
  radial-gradient(ellipse at 100% 70%,rgba(145,106,62,.13),transparent 42%),
  var(--bg);
 }
+button,input{font:inherit}
+button{cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.38;cursor:not-allowed}
+
 .shell{
  max-width:700px;
  margin:auto;
@@ -83,15 +79,15 @@ body{
  font-size:11px;
  margin:5px 0 0;
 }
-.iconBtn,.smallBtn{
+.iconBtn{
  border:1px solid var(--border);
  background:rgba(255,255,255,.07);
  color:var(--ink);
  border-radius:14px;
  min-height:42px;
  padding:0 12px;
+ font-size:20px;
 }
-.iconBtn{font-size:20px}
 .camera{
  position:relative;
  isolation:isolate;
@@ -106,7 +102,7 @@ body{
  0 22px 65px rgba(0,0,0,.43),
  inset 0 0 0 1px rgba(255,255,255,.07);
 }
-.camera video,.camera img,.camera canvas{
+.camera video,.camera img{
  width:100%;
  height:100%;
  object-fit:cover;
@@ -116,12 +112,16 @@ body{
 .camera video{transform:scaleX(-1)}
 .camera video.rear{transform:none}
 .camera img{display:none}
-.camera .tint,.camera .vignette,.camera .grain,.camera .shine{
+.camera .tint,
+.camera .warmOverlay,
+.camera .vignette,
+.camera .grain,
+.camera .shine{
  position:absolute;
  inset:0;
  pointer-events:none;
 }
-.tint{mix-blend-mode:soft-light}
+.tint,.warmOverlay{mix-blend-mode:soft-light}
 .vignette{
  background:radial-gradient(ellipse at center,transparent 34%,rgba(4,2,10,.9) 100%);
  opacity:0;
@@ -181,8 +181,6 @@ body{
  line-height:1.6;
  max-width:255px;
 }
-
-/* NEW GOLDEN CAMERA AND RED PLAY BUTTON */
 .camera-start-icon{
  width:108px;
  height:90px;
@@ -227,22 +225,6 @@ body{
  margin-left:5px;
  filter:drop-shadow(0 2px 2px rgba(0,0,0,.2));
 }
-@media(max-width:390px){
- .camera-start-icon{
-  width:90px;
-  height:74px;
-  margin:8px auto;
- }
- .empty button#openCamera{
-  width:82px;
-  height:82px;
-  min-width:82px;
-  min-height:82px;
- }
- .empty h2{font-size:19px}
-}
-/* END NEW CAMERA DESIGN */
-
 .toolbar{
  display:flex;
  align-items:center;
@@ -284,6 +266,7 @@ body{
  align-items:center;
  justify-content:space-between;
  margin:20px 0 10px;
+ gap:8px;
 }
 .sectionhead h2{
  font-size:15px;
@@ -295,37 +278,16 @@ body{
  font-size:11px;
  color:#c6b7bd;
 }
-.tabs{
- display:flex;
- gap:7px;
- overflow-x:auto;
- scrollbar-width:none;
- padding:2px 0 11px;
-}
-.tabs::-webkit-scrollbar,.filters::-webkit-scrollbar{display:none}
-.tab{
- white-space:nowrap;
- padding:9px 13px;
- border:1px solid var(--border);
- background:rgba(255,255,255,.045);
- border-radius:999px;
- color:#d3c8cc;
- font-size:12px;
-}
-.tab.on{
- background:#e7c29b;
- color:#2e2027;
- border-color:#e7c29b;
- font-weight:750;
-}
 .filters{
  display:flex;
  gap:10px;
  overflow-x:auto;
  scrollbar-width:none;
- padding:1px 1px 10px;
+ padding:3px 2px 12px;
  min-height:111px;
+ -webkit-overflow-scrolling:touch;
 }
+.filters::-webkit-scrollbar{display:none}
 .filterItem{
  flex:0 0 82px;
  min-width:82px;
@@ -365,12 +327,32 @@ body{
 }
 .filterItem.selected small{color:var(--gold)}
 .controls{
- background:rgba(255,255,255,.043);
+ margin-top:13px;
  border:1px solid var(--border);
- border-radius:20px;
- padding:16px;
- margin-top:16px;
+ border-radius:18px;
+ background:rgba(255,255,255,.043);
+ overflow:hidden;
 }
+.controls summary{
+ list-style:none;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:15px 17px;
+ cursor:pointer;
+ font-size:13px;
+ font-weight:650;
+ color:#f2e0cf;
+}
+.controls summary::-webkit-details-marker{display:none}
+.controls summary:after{
+ content:'+';
+ font-size:23px;
+ line-height:1;
+ color:#e6c098;
+}
+.controls[open] summary:after{content:'−'}
+.controlsBody{padding:0 16px 15px}
 .range{
  display:grid;
  grid-template-columns:84px 1fr 40px;
@@ -389,25 +371,17 @@ input[type=range]{
  width:100%;
  accent-color:#dfb98d;
 }
-.tools{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- margin-top:10px;
-}
-.tools button{
- min-height:38px;
+.liveBtn{
+ display:block;
+ margin:12px auto 0;
+ padding:10px 15px;
  border:1px solid var(--border);
  border-radius:12px;
- padding:0 11px;
  background:rgba(255,255,255,.07);
  color:#eee1e5;
  font-size:12px;
 }
-.tools .favorited{
- color:#f4b2bf;
- border-color:#e8a8b4;
-}
+.liveBtn[hidden]{display:none}
 .note{
  font-size:11px;
  color:#b6a8b3;
@@ -447,24 +421,9 @@ input[type=range]{
 .footer{
  text-align:center;
  font-size:10px;
- letter-spacing:normal;
  color:#877b87;
  margin-top:28px;
  padding-bottom:4px;
-}
-button:focus-visible,input:focus-visible{
- outline:2px solid #edc9a4;
- outline-offset:3px;
-}
-@media(min-width:600px){
- .camera{
-  max-height:620px;
-  aspect-ratio:4/3;
- }
- .shell{
-  padding-left:24px;
-  padding-right:24px;
- }
 }
 .whatsapp{
  display:flex;
@@ -510,11 +469,47 @@ button:focus-visible,input:focus-visible{
  font-size:23px;
  color:#c3eacb;
 }
-.footer p{
+.credit{
+ margin:12px 0 0;
+ color:#e8c39c;
+ font-size:11px;
+ letter-spacing:1px;
+}
+.footer .copyright{
  font-size:10px;
  letter-spacing:.1em;
  color:#9c8f9c;
  margin:18px 0 0;
+}
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible{
+ outline:2px solid #edc9a4;
+ outline-offset:3px;
+}
+@media(max-width:390px){
+ .camera-start-icon{
+  width:90px;
+  height:74px;
+  margin:8px auto;
+ }
+ .empty button#openCamera{
+  width:82px;
+  height:82px;
+  min-width:82px;
+  min-height:82px;
+ }
+ .empty h2{font-size:19px}
+}
+@media(min-width:600px){
+ .camera{
+  max-height:620px;
+  aspect-ratio:4/3;
+ }
+ .shell{
+  padding-left:24px;
+  padding-right:24px;
+ }
 }
 </style>
 </head>
@@ -528,7 +523,8 @@ button:focus-visible,input:focus-visible{
   <h1>Glow Camera <span style="color:#e9c39e">✦</span></h1>
   <p class="byline">Your light. Your mood. Your moment.</p>
  </div>
- <button class="iconBtn" id="flip" title="Switch camera" aria-label="Switch camera">↺</button>
+ <button class="iconBtn" id="flip" type="button"
+ title="Switch camera" aria-label="Switch camera">↺</button>
 </header>
 
 <section class="camera" id="frame" aria-label="Camera preview">
@@ -536,6 +532,7 @@ button:focus-visible,input:focus-visible{
  <img id="photo" alt="Selected photo preview">
 
  <div class="tint" id="tint"></div>
+ <div class="warmOverlay" id="warmOverlay"></div>
  <div class="vignette" id="vignette"></div>
  <div class="grain" id="grain"></div>
  <div class="shine" id="shine"></div>
@@ -543,14 +540,13 @@ button:focus-visible,input:focus-visible{
  <div class="cameraBadge" id="effectName">ORIGINAL</div>
  <div class="watermark">MILLION FILTERS</div>
 
- <!-- NEW CAMERA START SCREEN -->
  <div class="empty" id="empty">
-
   <h2>Every moment, elevated.</h2>
   <p>Use your camera or choose a photo to discover your perfect glow.</p>
 
   <div class="camera-start-icon" aria-hidden="true">
-   <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <svg viewBox="0 0 120 100" fill="none"
+    xmlns="http://www.w3.org/2000/svg">
     <defs>
      <linearGradient id="cameraGold" x1="0" y1="0" x2="120" y2="100">
       <stop stop-color="#FFE8BA"/>
@@ -565,89 +561,80 @@ button:focus-visible,input:focus-visible{
     </defs>
     <path d="M15 29H32L42 16H78L88 29H105 Q114 29 114 39V82 Q114 91 105 91H15 Q6 91 6 82V39 Q6 29 15 29Z"
      stroke="url(#cameraGold)" stroke-width="5" stroke-linejoin="round"/>
-    <circle cx="60" cy="59" r="24" fill="url(#cameraLens)" stroke="url(#cameraGold)" stroke-width="5"/>
-    <circle cx="60" cy="59" r="15" stroke="#F5D1B7" stroke-opacity=".55" stroke-width="2"/>
+    <circle cx="60" cy="59" r="24"
+     fill="url(#cameraLens)"
+     stroke="url(#cameraGold)" stroke-width="5"/>
+    <circle cx="60" cy="59" r="15"
+     stroke="#F5D1B7" stroke-opacity=".55" stroke-width="2"/>
    </svg>
   </div>
 
-  <button id="openCamera" type="button" aria-label="Open camera" title="Open camera">
+  <button id="openCamera" type="button"
+   aria-label="Open camera" title="Open camera">
    <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M7 3.8c0-.8.9-1.2 1.6-.8l12 7.7c1 .6 1 2 0 2.6l-12 7.7c-.7.4-1.6 0-1.6-.8V3.8z"/>
    </svg>
   </button>
-
  </div>
- <!-- END CAMERA START SCREEN -->
 </section>
 
 <div class="toolbar">
- <button class="action" id="uploadButton">▧ &nbsp; Photo</button>
- <button class="action main" id="capture" aria-label="Capture photo" disabled>Capture</button>
- <button class="action" id="save" disabled>↓ Save</button>
- <button class="action primary" id="share" disabled>↗ Share</button>
+ <button class="action" id="uploadButton" type="button">▧ &nbsp; Photo</button>
+ <button class="action main" id="capture" type="button"
+  aria-label="Capture photo" disabled>Capture</button>
+ <button class="action" id="save" type="button" disabled>↓ Save</button>
+ <button class="action primary" id="share" type="button" disabled>↗ Share</button>
 </div>
 
 <input class="hiddenInput" type="file" id="upload" accept="image/*">
 
 <div class="sectionhead">
  <h2>Signature looks</h2>
- <span>20 curated filters</span>
+ <span>20 curated filters · Swipe →</span>
 </div>
 
-<div class="tabs" id="tabs" aria-label="Filter categories"></div>
 <div class="filters" id="filters" aria-label="Available photo filters"></div>
 
-<div class="controls">
-
- <div class="sectionhead" style="margin:0 0 5px">
-  <h2>Fine tune your glow</h2>
-  <span id="selectedName">Original</span>
+<details class="controls" id="adjustPanel">
+ <summary>
+  ✦ Adjust
+  <span style="font-size:11px;color:#bfb0b7;font-weight:400;margin-left:auto;margin-right:10px">Optional</span>
+ </summary>
+ <div class="controlsBody">
+  <div class="range">
+   <label for="strength">Intensity</label>
+   <input id="strength" type="range" min="0" max="100" value="85">
+   <output id="strengthOut">85%</output>
+  </div>
+  <div class="range">
+   <label for="bright">Brightness</label>
+   <input id="bright" type="range" min="-35" max="35" value="0">
+   <output id="brightOut">0</output>
+  </div>
+  <div class="range">
+   <label for="warm">Warmth</label>
+   <input id="warm" type="range" min="-50" max="50" value="0">
+   <output id="warmOut">0</output>
+  </div>
+  <div class="range">
+   <label for="soft">Softness</label>
+   <input id="soft" type="range" min="0" max="40" value="0">
+   <output id="softOut">0</output>
+  </div>
+  <div class="range">
+   <label for="vignetteControl">Vignette</label>
+   <input id="vignetteControl" type="range" min="0" max="80" value="15">
+   <output id="vignetteControlOut">15</output>
+  </div>
+  <div class="range">
+   <label for="grainControl">Grain</label>
+   <input id="grainControl" type="range" min="0" max="50" value="8">
+   <output id="grainControlOut">8</output>
+  </div>
  </div>
+</details>
 
- <div class="range">
-  <label for="strength">Intensity</label>
-  <input id="strength" type="range" min="0" max="100" value="85">
-  <output id="strengthOut">85%</output>
- </div>
-
- <div class="range">
-  <label for="bright">Brightness</label>
-  <input id="bright" type="range" min="-35" max="35" value="0">
-  <output id="brightOut">0</output>
- </div>
-
- <div class="range">
-  <label for="warm">Warmth</label>
-  <input id="warm" type="range" min="-50" max="50" value="0">
-  <output id="warmOut">0</output>
- </div>
-
- <div class="range">
-  <label for="soft">Softness</label>
-  <input id="soft" type="range" min="0" max="40" value="0">
-  <output id="softOut">0</output>
- </div>
-
- <div class="range">
-  <label for="vignetteControl">Vignette</label>
-  <input id="vignetteControl" type="range" min="0" max="80" value="15">
-  <output id="vignetteControlOut">15</output>
- </div>
-
- <div class="range">
-  <label for="grainControl">Grain</label>
-  <input id="grainControl" type="range" min="0" max="50" value="8">
-  <output id="grainControlOut">8</output>
- </div>
-
- <div class="tools">
-  <button id="before">Hold to compare</button>
-  <button id="favorite">♡ Favorite</button>
-  <button id="favoritesOnly">Favorites only: Off</button>
-  <button id="reset">Reset edits</button>
-  <button id="live">↺ Live camera</button>
- </div>
-</div>
+<button class="liveBtn" id="live" type="button" hidden>↺ Live camera</button>
 
 <p class="note">
  Filters transform the entire image — no face stickers or disguises.
@@ -667,7 +654,9 @@ button:focus-visible,input:focus-visible{
   </span>
   <span class="wa-arrow" aria-hidden="true">↗</span>
  </a>
- <p>© 2026 MILLION FILTERS · CREATE YOUR GLOW</p>
+
+ <p class="credit">FAOZAN - GHADEER</p>
+ <p class="copyright">© 2026 MILLION FILTERS · CREATE YOUR GLOW</p>
 </footer>
 
 </main>
@@ -677,7 +666,6 @@ button:focus-visible,input:focus-visible{
 <script>
 'use strict';
 
-// Original filter collection
 const looks=[
  ['Original','All',100,100,100,0,0,'transparent',0,0,0,'#8a818e','#382e42'],
  ['Silk Glow','Soft',108,93,107,5,0,'#f2c7db',.28,18,5,'#f5d8e1','#b788a5'],
@@ -703,20 +691,21 @@ const looks=[
 ];
 
 const $=id=>document.getElementById(id);
-const video=$('video'),photo=$('photo');
+const video=$('video');
+const photo=$('photo');
 
 let stream=null;
 let mode='none';
 let front=true;
 let chosen=0;
-let category='All';
-let favoritesOnly=false;
-let compare=false;
 let uploadedURL=null;
 let toastTimer;
 
-const favs=new Set(JSON.parse(localStorage.getItem('faozan-glow-favorites')||'[]'));
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
+
+function track(name){
+ if(typeof gtag==='function')gtag('event',name);
+}
 
 function notify(msg){
  $('toast').textContent=msg;
@@ -726,7 +715,7 @@ function notify(msg){
 }
 
 function settings(){
- return {
+ return{
   strength:+$('strength').value/100,
   bright:+$('bright').value,
   warm:+$('warm').value,
@@ -737,15 +726,15 @@ function settings(){
 }
 
 function styleData(){
- const x=looks[chosen],s=settings();
- const k=compare?0:s.strength;
+ const x=looks[chosen];
+ const s=settings();
+ const k=s.strength;
  const blend=(a,b)=>a+(b-a)*k;
- const css=`brightness(${Math.max(.1,blend(100,x[2])+s.bright)/100}) contrast(${blend(100,x[3])/100}) saturate(${blend(100,x[4])/100}) sepia(${blend(0,x[5])/100}) hue-rotate(${blend(0,x[6])}deg) blur(${s.soft/22}px)`;
- const tintOpacity=x[7]==='transparent'?0:x[8]*k;
- return {
-  css,
+
+ return{
+  css:`brightness(${Math.max(.1,blend(100,x[2])+s.bright)/100}) contrast(${blend(100,x[3])/100}) saturate(${blend(100,x[4])/100}) sepia(${blend(0,x[5])/100}) hue-rotate(${blend(0,x[6])}deg) blur(${s.soft/22}px)`,
   tint:x[7],
-  tintOpacity,
+  tintOpacity:x[7]==='transparent'?0:x[8]*k,
   vignette:clamp(x[9]/100*k+s.vig*.55,0,.9),
   grain:clamp(x[10]/100*k+s.grain*.26,0,.55),
   shine:chosen===0?0:clamp((x[2]-100)/100*k*.65,0,.15),
@@ -755,25 +744,26 @@ function styleData(){
 
 function apply(){
  const d=styleData();
+
  video.style.filter=d.css;
  photo.style.filter=d.css;
 
- const tint=$('tint');
- tint.style.background=d.tint;
- tint.style.opacity=d.tintOpacity;
+ $('tint').style.background=d.tint;
+ $('tint').style.opacity=d.tintOpacity;
 
- tint.style.backgroundImage=d.warm===0?'none':
- `linear-gradient(${d.warm>0?'rgba(255,164,65,':'rgba(80,153,255,'}${Math.abs(d.warm)*.32}),${d.warm>0?'rgba(255,164,65,':'rgba(80,153,255,'}${Math.abs(d.warm)*.32}))`;
+ $('warmOverlay').style.background=d.warm>0?'#ffa441':'#5099ff';
+ $('warmOverlay').style.opacity=Math.abs(d.warm)*.32;
 
  $('vignette').style.opacity=d.vignette;
  $('grain').style.opacity=d.grain;
  $('shine').style.opacity=d.shine;
- $('effectName').textContent=compare?'ORIGINAL':looks[chosen][0].toUpperCase();
- $('selectedName').textContent=looks[chosen][0];
- $('favorite').textContent=(favs.has(chosen)?'♥':'♡')+' Favorite';
- $('favorite').classList.toggle('favorited',favs.has(chosen));
 
- for(const id of ['strength','bright','warm','soft','vignetteControl','grainControl']){
+ $('effectName').textContent=looks[chosen][0].toUpperCase();
+
+ for(const id of [
+  'strength','bright','warm','soft',
+  'vignetteControl','grainControl'
+ ]){
   $(id+'Out').textContent=$(id).value+(id==='strength'?'%':'');
  }
 }
@@ -781,51 +771,42 @@ function apply(){
 function drawFilters(){
  const box=$('filters');
  box.replaceChildren();
+
  looks.forEach((x,i)=>{
-  if(category!=='All'&&x[1]!==category)return;
-  if(favoritesOnly&&!favs.has(i))return;
   const b=document.createElement('button');
   b.type='button';
   b.className='filterItem'+(chosen===i?' selected':'');
+
   b.setAttribute('aria-label',x[0]);
   b.setAttribute('aria-pressed',String(chosen===i));
+
   const sw=document.createElement('span');
   sw.className='swatch';
   sw.style.setProperty('--c1',x[11]);
   sw.style.setProperty('--c2',x[12]);
-  const txt=document.createElement('small');
-  txt.textContent=x[0];
-  b.append(sw,txt);
+
+  const label=document.createElement('small');
+  label.textContent=x[0];
+
+  b.append(sw,label);
+
   b.onclick=()=>{
    chosen=i;
    drawFilters();
    apply();
+   track('filter_select');
   };
+
   box.append(b);
  });
 }
 
-function drawTabs(){
- const cats=['All','Soft','Romance','Luxury','Earth'];
- $('tabs').replaceChildren();
- cats.forEach(c=>{
-  const b=document.createElement('button');
-  b.className='tab'+(category===c?' on':'');
-  b.textContent=c;
-  b.onclick=()=>{
-   category=c;
-   drawTabs();
-   drawFilters();
-  };
-  $('tabs').append(b);
- });
-}
-
-function active(value){
- $('empty').style.display=value?'none':'flex';
- $('capture').disabled=!value;
- $('save').disabled=!value;
- $('share').disabled=!value;
+function active(on){
+ $('empty').style.display=on?'none':'flex';
+ $('capture').disabled=!on;
+ $('save').disabled=!on;
+ $('share').disabled=!on;
+ $('live').hidden=mode!=='photo';
 }
 
 async function stopCamera(){
@@ -835,14 +816,15 @@ async function stopCamera(){
  }
 }
 
-// Camera activation and Analytics event
 async function startCamera(){
  if(!navigator.mediaDevices?.getUserMedia){
   notify('Camera requires HTTPS and a supported browser. Use Photo instead.');
   return;
  }
+
  try{
   await stopCamera();
+
   const newStream=await navigator.mediaDevices.getUserMedia({
    audio:false,
    video:{
@@ -851,20 +833,21 @@ async function startCamera(){
     height:{ideal:1706}
    }
   });
+
   stream=newStream;
   video.srcObject=stream;
   await video.play();
+
   video.classList.toggle('rear',!front);
   video.style.display='block';
   photo.style.display='none';
+
   mode='live';
   active(true);
-
-  if(typeof gtag==='function'){
-   gtag('event','camera_open');
-  }
-
+  apply();
+  track('camera_open');
   notify('Camera ready');
+
  }catch(err){
   notify('Camera unavailable. Allow camera access or choose Photo.');
   active(mode==='photo');
@@ -872,22 +855,28 @@ async function startCamera(){
 }
 
 $('openCamera').onclick=startCamera;
+
 $('flip').onclick=()=>{
  front=!front;
  startCamera();
 };
+
 $('live').onclick=startCamera;
+
 $('uploadButton').onclick=()=>$('upload').click();
 
 $('upload').onchange=e=>{
  const file=e.target.files?.[0];
  if(!file)return;
+
  if(!file.type.startsWith('image/')){
   notify('Select an image file');
   return;
  }
+
  const u=URL.createObjectURL(file);
  const img=new Image();
+
  img.onload=()=>{
   if(uploadedURL)URL.revokeObjectURL(uploadedURL);
   uploadedURL=u;
@@ -895,49 +884,65 @@ $('upload').onchange=e=>{
   photo.style.display='block';
   video.style.display='none';
   mode='photo';
+
   active(true);
   stopCamera();
   apply();
+  track('photo_upload');
   notify('Photo ready for editing');
  };
+
  img.onerror=()=>{
   URL.revokeObjectURL(u);
   notify('Unable to open this image');
  };
+
  img.src=u;
  e.target.value='';
 };
 
-// Export image with filters
 function photoCanvas(){
- if(mode==='none')throw Error('Choose a photo or enable camera');
+ if(mode==='none'){
+  throw Error('Choose a photo or enable camera');
+ }
+
  const src=mode==='photo'?photo:video;
 
- if(mode==='photo'&&!photo.complete)throw Error('Photo is still loading');
- if(mode==='live'&&video.readyState<2)throw Error('Camera not ready');
+ if(mode==='photo'&&!photo.complete){
+  throw Error('Photo is still loading');
+ }
+
+ if(mode==='live'&&video.readyState<2){
+  throw Error('Camera not ready');
+ }
 
  const w0=mode==='photo'?photo.naturalWidth:video.videoWidth;
  const h0=mode==='photo'?photo.naturalHeight:video.videoHeight;
- if(!w0||!h0)throw Error('Image unavailable');
 
- const max=2200;
- const scale=Math.min(1,max/Math.max(w0,h0));
+ if(!w0||!h0){
+  throw Error('Image unavailable');
+ }
+
+ const scale=Math.min(1,2200/Math.max(w0,h0));
  const w=Math.max(1,Math.round(w0*scale));
  const h=Math.max(1,Math.round(h0*scale));
 
  const c=document.createElement('canvas');
  c.width=w;
  c.height=h;
+
  const ctx=c.getContext('2d');
  if(!ctx)throw Error('Canvas is unavailable');
 
  const d=styleData();
 
  ctx.save();
+
  if(mode==='live'&&front){
   ctx.translate(w,0);
   ctx.scale(-1,1);
  }
+
  ctx.filter=d.css;
  ctx.drawImage(src,0,0,w,h);
  ctx.restore();
@@ -964,7 +969,12 @@ function photoCanvas(){
  if(d.shine){
   ctx.save();
   ctx.globalAlpha=d.shine;
-  const g=ctx.createRadialGradient(w*.2,h*.12,0,w*.2,h*.12,Math.max(w,h)*.8);
+
+  const g=ctx.createRadialGradient(
+   w*.2,h*.12,0,
+   w*.2,h*.12,Math.max(w,h)*.8
+  );
+
   g.addColorStop(0,'#ffeed0');
   g.addColorStop(1,'transparent');
   ctx.fillStyle=g;
@@ -975,9 +985,15 @@ function photoCanvas(){
  if(d.vignette){
   ctx.save();
   const r=Math.max(w,h)*.77;
-  const g=ctx.createRadialGradient(w/2,h/2,r*.2,w/2,h/2,r);
+
+  const g=ctx.createRadialGradient(
+   w/2,h/2,r*.2,
+   w/2,h/2,r
+  );
+
   g.addColorStop(0,'rgba(4,2,10,0)');
   g.addColorStop(1,`rgba(4,2,10,${Math.min(.92,d.vignette)})`);
+
   ctx.fillStyle=g;
   ctx.fillRect(0,0,w,h);
   ctx.restore();
@@ -987,6 +1003,7 @@ function photoCanvas(){
   const noise=document.createElement('canvas');
   noise.width=160;
   noise.height=160;
+
   const nc=noise.getContext('2d');
   const pixels=nc.createImageData(160,160);
 
@@ -995,7 +1012,9 @@ function photoCanvas(){
    pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=val;
    pixels.data[i+3]=Math.round(d.grain*75);
   }
+
   nc.putImageData(pixels,0,0);
+
   ctx.save();
   ctx.globalCompositeOperation='screen';
   ctx.fillStyle=ctx.createPattern(noise,'repeat');
@@ -1008,27 +1027,39 @@ function photoCanvas(){
 
 function blobFromCanvas(c){
  return new Promise((resolve,reject)=>
-  c.toBlob(b=>b?resolve(b):reject(Error('Image export failed')),'image/jpeg',.94)
+  c.toBlob(
+   b=>b?resolve(b):reject(Error('Image export failed')),
+   'image/jpeg',
+   .94
+  )
  );
 }
 
 const makeName=()=>`FAOZAN-Glow-${new Date().toISOString().replace(/[:.]/g,'-')}.jpg`;
 
 async function makeFile(){
- return new File([await blobFromCanvas(photoCanvas())],makeName(),{type:'image/jpeg'});
+ return new File(
+  [await blobFromCanvas(photoCanvas())],
+  makeName(),
+  {type:'image/jpeg'}
+ );
 }
 
 async function download(){
  try{
   const file=await makeFile();
   const url=URL.createObjectURL(file);
+
   const a=document.createElement('a');
   a.href=url;
   a.download=file.name;
   document.body.append(a);
   a.click();
   a.remove();
+
   setTimeout(()=>URL.revokeObjectURL(url),10000);
+
+  track('photo_save');
   notify('Image saved or ready in Downloads');
  }catch(err){
   notify(err.message||'Cannot save photo');
@@ -1040,14 +1071,22 @@ $('save').onclick=download;
 $('share').onclick=async()=>{
  try{
   const file=await makeFile();
+
   if(navigator.canShare?.({files:[file]})&&navigator.share){
-   await navigator.share({files:[file],title:'MILLION FILTERS'});
+   await navigator.share({
+    files:[file],
+    title:'MILLION FILTERS'
+   });
+   track('photo_share');
    return;
   }
+
   await download();
   notify('Sharing unavailable here. Image saved for sharing.');
  }catch(err){
-  if(err.name!=='AbortError')notify('Unable to share. Try Save.');
+  if(err.name!=='AbortError'){
+   notify('Unable to share. Try Save.');
+  }
  }
 };
 
@@ -1056,18 +1095,21 @@ $('capture').onclick=async()=>{
   await download();
   return;
  }
+
  try{
   const file=await makeFile();
   const url=URL.createObjectURL(file);
-  if(uploadedURL)URL.revokeObjectURL(uploadedURL);
-  uploadedURL=url;
-
   const img=new Image();
+
   img.onload=()=>{
+   if(uploadedURL)URL.revokeObjectURL(uploadedURL);
+   uploadedURL=url;
+
    photo.src=url;
    photo.style.display='block';
    video.style.display='none';
    mode='photo';
+
    stopCamera();
    chosen=0;
 
@@ -1078,85 +1120,41 @@ $('capture').onclick=async()=>{
     soft:0,
     vignetteControl:0,
     grainControl:0
-   }))$(id).value=v;
+   })){
+    $(id).value=v;
+   }
 
    drawFilters();
    apply();
+   active(true);
+   track('photo_capture');
    notify('Captured! Save or share your photo.');
   };
+
+  img.onerror=()=>{
+   URL.revokeObjectURL(url);
+   notify('Capture failed. Please try again.');
+  };
+
   img.src=url;
  }catch(err){
   notify('Capture failed. Please try again.');
  }
 };
 
-$('favorite').onclick=()=>{
- if(favs.has(chosen))favs.delete(chosen);
- else favs.add(chosen);
-
- localStorage.setItem('faozan-glow-favorites',JSON.stringify([...favs]));
- drawFilters();
- apply();
-};
-
-$('favoritesOnly').onclick=()=>{
- favoritesOnly=!favoritesOnly;
- $('favoritesOnly').textContent='Favorites only: '+(favoritesOnly?'On':'Off');
- drawFilters();
-};
-
-$('reset').onclick=()=>{
- chosen=0;
- for(const [id,val] of Object.entries({
-  strength:85,
-  bright:0,
-  warm:0,
-  soft:0,
-  vignetteControl:15,
-  grainControl:8
- }))$(id).value=val;
-
- drawFilters();
- apply();
- notify('Edits reset');
-};
-
-for(const id of ['strength','bright','warm','soft','vignetteControl','grainControl']){
+for(const id of [
+ 'strength','bright','warm','soft',
+ 'vignetteControl','grainControl'
+]){
  $(id).addEventListener('input',apply);
 }
 
-const before=$('before');
-
-function setCompare(v){
- compare=v;
- before.textContent=v?'Original preview':'Hold to compare';
- apply();
-}
-
-before.addEventListener('pointerdown',e=>{
- before.setPointerCapture?.(e.pointerId);
- setCompare(true);
-});
-
-for(const event of ['pointerup','pointercancel','lostpointercapture']){
- before.addEventListener(event,()=>setCompare(false));
-}
-
-before.addEventListener('keydown',e=>{
- if(e.code==='Space'||e.code==='Enter'){
-  e.preventDefault();
-  setCompare(true);
- }
-});
-
-before.addEventListener('keyup',()=>setCompare(false));
-
 window.addEventListener('pagehide',()=>stopCamera());
 
-drawTabs();
 drawFilters();
 apply();
 active(false);
 </script>
+
 </body>
 </html>
